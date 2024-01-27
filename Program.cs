@@ -40,57 +40,45 @@
                 Console.WriteLine(t);
             }
         }
-    }
 
-
-    public enum TimeFormat
-    {
-        Mil,
-        Hour12,
-        Hour24
-    }
-
-
-    public class Time
-    {
-        private static TimeFormat TIME_FORMAT = TimeFormat.Hour12;
-        public int Hour { get; private set; }
-        public int Minute { get; private set; }
-
-        public Time(int hours = 0, int minutes = 0)
+        public enum TimeFormat
         {
-            if (hours >= 0 && hours <= 24)
-                Hour = hours;
-            else
-                Hour = 0;
-
-            if (minutes >= 0 && minutes < 60)
-                Minute = minutes;
-            else
-                Minute = 0;
+            Mil,
+            Hour12,
+            Hour24
         }
 
-        public override string ToString()
+        public class Time
         {
-            switch (TIME_FORMAT)
+            private static TimeFormat TIME_FORMAT = TimeFormat.Hour12;
+            public int Hour { get; }
+            public int Minute { get; }
+
+            public Time(int hour = 0, int minute = 0)
             {
-                case TimeFormat.Mil:
-                    return $"{Hour:D2}{Minute:D2}";
-
-                case TimeFormat.Hour12:
-                    return $"{(Hour % 12 == 0 ? 12 : Hour % 12):D2}:{Minute:D2} {(Hour < 12 ? "AM" : "PM")}";
-
-                case TimeFormat.Hour24:
-                    return $"{Hour:D2}:{Minute:D2}";
-
-                default:
-                    throw new InvalidOperationException("Invalid time format");
+                Hour = (hour >= 0 && hour < 24) ? hour : 0;
+                Minute = (minute >= 0 && minute < 60) ? minute : 0;
             }
-        }
 
-        public static void SetTimeFormat(TimeFormat timeFormat)
-        {
-            TIME_FORMAT = timeFormat;
+            public override string ToString()
+            {
+                switch (TIME_FORMAT)
+                {
+                    case TimeFormat.Mil:
+                        return $"{Hour:D2}{Minute:D2}";
+                    case TimeFormat.Hour24:
+                        return $"{Hour:D2}:{Minute:D2}";
+                    case TimeFormat.Hour12:
+                        return $"{Hour % 12:D2}:{Minute:D2} {(Hour < 12 ? "AM" : "PM")}";
+                    default:
+                        return base.ToString();
+                }
+            }
+
+            public static void SetTimeFormat(TimeFormat timeFormat)
+            {
+                TIME_FORMAT = timeFormat;
+            }
         }
     }
 }
